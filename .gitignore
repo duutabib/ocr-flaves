@@ -25,6 +25,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+ghana_invoice_samples/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -170,5 +171,3 @@ cython_debug/
 # Ruff stuff:
 .ruff_cache/
 
-# PyPI configuration file
-.pypirc
