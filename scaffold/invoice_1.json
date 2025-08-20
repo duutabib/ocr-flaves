@@ -1,0 +1,120 @@
+{
+  "company": {
+    "name": "Cofkans Company Ltd",
+    "description": "Dealers in Electrical Appliance & Lighting Centre",
+    "address": "P.O. Box 530, Kumasi - Ghana",
+    "phone": "+233 220 2231",
+    "fax": "+233 220 2231",
+    "email": "cofkans@yahoomail.com",
+    "branches": [
+      "Accra Opoku Ware - 030 274107",
+      "Weija Barrier Star Oil - 030 285074"
+    ]
+  },
+  "invoice": {
+    "number": "0004714",
+    "date": "14-06-2012",
+    "customer": {
+      "name": "",
+      "address": "",
+      "region": "",
+      "phone": ""
+    },
+    "order_number": "",
+    "sales_rep": "",
+    "items": [
+      {
+        "qty": 2,
+        "description": "3amp double socket",
+        "unit_price": 8.00,
+        "total": 16.00
+      },
+      {
+        "qty": 2,
+        "description": "3amp single socket",
+        "unit_price": 6.00,
+        "total": 12.00
+      },
+      {
+        "qty": 2,
+        "description": "6amp 1way switch",
+        "unit_price": 3.00,
+        "total": 6.00
+      },
+      {
+        "qty": 2,
+        "description": "6amp 2way switch",
+        "unit_price": 3.00,
+        "total": 6.00
+      },
+      {
+        "qty": 1,
+        "description": "6amp 1phase switch",
+        "unit_price": 9.00,
+        "total": 9.00
+      },
+      {
+        "qty": 1,
+        "description": "6amp switch",
+        "unit_price": 8.00,
+        "total": 8.00
+      },
+      {
+        "qty": 1,
+        "description": "2amp switch",
+        "unit_price": 6.00,
+        "total": 6.00
+      },
+      {
+        "qty": 2,
+        "description": "T.V socket",
+        "unit_price": 7.00,
+        "total": 14.00
+      },
+      {
+        "qty": 1,
+        "description": "Meter board",
+        "unit_price": 5.00,
+        "total": 5.00
+      },
+      {
+        "qty": 1,
+        "description": "Cut-out",
+        "unit_price": 10.00,
+        "total": 10.00
+      },
+      {
+        "qty": 1,
+        "description": "16x25 trunking",
+        "unit_price": 2.00,
+        "total": 2.00
+      },
+      {
+        "qty": 1,
+        "description": "Ceiling rose/whit holder",
+        "unit_price": 3.50,
+        "total": 3.50
+      },
+      {
+        "qty": 1,
+        "description": "Angle fitting",
+        "unit_price": 1.50,
+        "total": 1.50
+      },
+      {
+        "qty": 1,
+        "description": "16mm insulated",
+        "unit_price": 2.00,
+        "total": 2.00
+      }
+    ],
+    "subtotal": 91.00,
+    "vat": 12.5,
+    "nhis": 2.5,
+    "total": 351.00
+  },
+  "signatures": {
+    "customer": "",
+    "manager": ""
+  }
+}
