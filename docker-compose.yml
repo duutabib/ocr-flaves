@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # LLaVA Service
+  llava-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.llava
+    ports:
+      - "11434:11434"
+    volumes:
+      - llava_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 8G
+    
+  # bakLLaVA Service
+  bakllava-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.bakllava
+    ports:
+      - "11435:11435"
+    volumes:
+      - bakllava_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 8G
+    
+  # Extract Service
+  extract-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.extract
+    volumes:
+      - ./ghana_invoice_samples:/app/ghana_invoice_samples
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - llava-service
+      - bakllava-service
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+
+volumes:
+  llava_data:
+  bakllava_data:

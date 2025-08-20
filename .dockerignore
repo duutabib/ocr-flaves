@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.env
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local development
+*.log
+
+# Model data (handled by volumes)
+.ollama/
+
+# Local directories that will be mounted
+ghana_invoice_samples/
+output/
