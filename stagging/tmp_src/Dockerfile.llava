@@ -1,0 +1,33 @@
+# Stage 1: Base Ollama server
+FROM ollama/ollama:latest as ollama
+
+# Stage 2: Python slim image
+FROM python:3.10-slim
+
+# Install curl & dependencies for Ollama
+RUN apt-get update && apt-get install -y \
+    curl git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Ollama binaries from first stage
+COPY --from=ollama /bin/ollama /bin/ollama
+
+# Create a working directory
+WORKDIR /app
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Pull LLaVA model
+COPY startup.sh  /app/startup.sh 
+RUN chmod +x startup.sh
+
+# Copy FastAPI server code
+COPY server.py .
+
+# Expose both Ollama API port and FastAPI port
+EXPOSE 11434 8000
+
+# Start both Ollama and FastAPI using supervisord-style command
+CMD ["/bin/sh", "-c", "/app/start.sh && uvicorn server:app --host 0.0.0.0 --port 8000"]

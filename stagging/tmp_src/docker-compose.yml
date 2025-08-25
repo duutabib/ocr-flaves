@@ -1,0 +1,38 @@
+# docker-compose.yml
+
+services:
+  # Data extraction application
+  llava-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.llava
+    ports:
+      - "11434:11434"
+    # Pass the URLs of the model services as env variables
+    volumes:
+      - llava_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 8G
+    
+    
+  # Second service 
+  bakllava-service:
+    build: 
+      context: .
+      dockerfile: Dockerfile.bakllava
+    ports:
+      - "11435:11435" # set this to host port 
+    volumes:
+      - bakllava_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 8G
+      
+volumes:
+  llava_data:
+  bakllava_data:
