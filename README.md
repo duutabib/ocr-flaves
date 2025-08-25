@@ -69,20 +69,11 @@ docker build -t ocr-flaves -f Dockerfile.extract .
 docker run -p 5000:5000 ocr-flaves
 ```
 
-## Configuration
-
-Edit `stagging/config.py` to configure:
-- Model parameters
-- API endpoints
-- Processing settings
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contributing
-
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
 
 ## Support
 
