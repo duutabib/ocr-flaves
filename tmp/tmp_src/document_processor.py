@@ -12,7 +12,9 @@ class DocumentProcessor:
         '.jpg': 'image',
         '.jpeg': 'image',
         '.png': 'image',
+        '.txt': 'text',
         '.pdf': 'document',
+        '.doc': 'document',
         '.docx': 'document',
         '.xlsx': 'spreadsheet'
     }
