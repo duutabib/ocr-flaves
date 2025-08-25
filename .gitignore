@@ -24,7 +24,7 @@ share/python-wheels/
 MANIFEST
 data/
 ghana_invoice_samples/
-.DS_Store/
+.DS_Store
 *.ipynb
 scaffold/
 
