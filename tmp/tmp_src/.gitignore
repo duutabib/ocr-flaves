@@ -1,3 +1,4 @@
 scaffold/
-.ipynb
+*.ipynb
 ghana_invoice_samples/
+*.DS_Store
