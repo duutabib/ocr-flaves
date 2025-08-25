@@ -1,2 +1,89 @@
-# ocr-flaves
-This repo contains code to extract data from invoices... 
+# OCR-Flaves: Intelligent Document Processing
+
+A powerful OCR (Optical Character Recognition) solution built with Python and Docker, designed to extract and process data from various document types including invoices, receipts, and forms.
+
+## Features
+
+- **Multi-format Support**: Process images (JPG, PNG, WEBP) and PDFs
+- **Advanced OCR**: Utilizes LLaVA and bakLLaVA models for accurate text extraction
+- **Dockerized**: Easy deployment with Docker and Docker Compose
+- **Document Type Detection**: Automatically identifies and processes different document types
+- **Structured Output**: Returns clean, structured data from unstructured documents
+
+## Prerequisites
+
+- Docker and Docker Compose
+- Python 3.9+
+- Git
+
+## Quick Start
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/ocr-flaves.git
+   cd ocr-flaves
+   ```
+
+2. Start the services:
+   ```bash
+   docker-compose up -d
+   ```
+
+3. The system will be available at `http://localhost:11434`
+
+## Project Structure
+
+```
+.
+├── data/                  # Sample invoice documents for testing
+├── scaffold/              # Development and experimental code
+├── stagging/              # Production-ready code and configurations
+│   ├── Dockerfile.llava   # LLaVA model container
+│   ├── Dockerfile.bakllava # bakLLaVA model container
+│   ├── extract.py         # Main extraction logic
+│   └── document_processor.py # Document processing utilities
+├── .gitignore            # Git ignore file
+├── docker-compose.yml     # Docker Compose configuration
+├── Dockerfile.extract     # Main application Dockerfile
+└── requirements.txt      # Python dependencies
+```
+
+## Usage
+
+### Process a Single Document
+
+```python
+from document_processor import DocumentProcessor
+
+processor = DocumentProcessor()
+extracted_data = processor.process_document("path/to/your/document.pdf")
+print(extracted_data)
+```
+
+### Using Docker
+
+Build and run the service:
+
+```bash
+docker build -t ocr-flaves -f Dockerfile.extract .
+docker run -p 5000:5000 ocr-flaves
+```
+
+## Configuration
+
+Edit `stagging/config.py` to configure:
+- Model parameters
+- API endpoints
+- Processing settings
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
+
+## Support
+
+For support, please open an issue in the GitHub repository.
