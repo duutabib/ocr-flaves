@@ -27,6 +27,7 @@ ghana_invoice_samples/
 .DS_Store
 *.ipynb
 scaffold/
+*.txt
 
 
 # PyInstaller
