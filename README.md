@@ -22,6 +22,7 @@ A powerful OCR (Optical Character Recognition) solution built with Python and Do
    ```bash
    git clone https://github.com/yourusername/ocr-flaves.git
    cd ocr-flaves
+   cd stagging 
    ```
 
 2. Start the services:
@@ -73,5 +74,4 @@ docker run -p 5000:5000 ocr-flaves
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
