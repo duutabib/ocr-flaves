@@ -70,6 +70,10 @@ docker build -t ocr-flaves -f Dockerfile.extract .
 docker run -p 5000:5000 ocr-flaves
 ```
 
+### Project Plan
+
+The [Project Plan](./plan.md) file contains the project plan.
+
 
 ## License
 
