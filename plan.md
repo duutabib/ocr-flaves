@@ -1,0 +1,74 @@
+# Containerization and Integration Plan for extract.py
+
+## Notes
+- Fixed indentation and parameter bugs in extract.py
+- Improved extract.py to interact with both LLaVA and bakLLaVA containers
+- Confirmed best practice: containerizing extract code for consistency and deployment
+- Decision: Add extract.py as a service to Docker Compose
+- Created requirements.txt and Dockerfile.extract for extract service
+- .dockerignore created to keep container lean
+- User requested document format detection to be added to extract.py
+
+## Task List
+- [x] Add containerization for two models placeholder models.
+- [x] Add containarized service for extract.py
+- [x] Fix extract.py bugs and improve output formatting
+- [x] Create requirements.txt for extract service
+- [x] Create Dockerfile.extract for extract service
+- [x] Create .dockerignore for extract context
+- [x] Update docker-compose.yml to add extract-service
+- [ ] Test extract-service container with llava and bakllava services
+- [ ] Document usage and troubleshooting steps
+- [ ] Implement document format detection in extract.py
+- [ ] Implement document type detection in extract.py
+- [ ] Implement scoring of models based on response quality
+- [ ] Implement duplicate detection for documents.
+- [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
+- [] Implement user selection for where results from modesl are quite different according to some tolerance.
+- [] Implement data parser to standardize the output from models for consistent output by doucment type.
+- [] Implement document type detection in extract.py
+- [] Implement scoring of models based on response quality
+- [] Implement duplicate detection for documents.
+- [] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
+- [] Implement user selection for where results from modesl are quite different according to some tolerance.
+- [] Implement data parser to standardize the output from models for consistent output by doucment type.
+
+
+## Testing
+
+### Unit Tests for Extraction Features
+
+#### Test Cases for Document Format Detection
+- [ ] Test detection of PDF files
+- [ ] Test detection of image formats (PNG, JPG, TIFF)
+- [ ] Test handling of unsupported formats
+- [ ] Test corrupted file handling
+
+#### Test Cases for Document Type Detection
+- [ ] Test receipt detection
+- [ ] Test invoice detection
+- [ ] Test business card detection
+- [ ] Test handwritten note detection
+- [ ] Test unknown document type handling
+
+#### Test Cases for Data Extraction
+- [ ] Test text extraction accuracy
+- [ ] Test table extraction
+- [ ] Test data validation
+- [ ] Test handling of poor quality scans
+- [ ] Test extraction from different document layouts
+
+#### Integration Tests
+- [ ] Test end-to-end extraction pipeline
+- [ ] Test model response consistency
+- [ ] Test error handling and logging
+- [ ] Test performance with large documents
+
+### Test Automation
+- [ ] Set up pytest framework
+- [ ] Create test fixtures for sample documents
+- [ ] Implement CI/CD pipeline for tests
+- [ ] Add code coverage reporting
+
+## Current Goal
+Test extract container with services
