@@ -78,4 +78,3 @@ The [Project Plan](./plan.md) file contains the project plan.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
