@@ -32,7 +32,7 @@
 - [] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from modesl are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
-
+- [X] Implemented document type detection with `python-magic`.
 
 ## Testing
 
