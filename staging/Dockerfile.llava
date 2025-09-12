@@ -20,8 +20,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Pull LLaVA model
-COPY startup.sh  /app/startup.sh 
-RUN chmod +x startup.sh
+COPY startup-llava.sh  /app/startup-llava.sh 
+RUN chmod +x startup-llava.sh
 
 # Copy FastAPI server code
 COPY server.py .
