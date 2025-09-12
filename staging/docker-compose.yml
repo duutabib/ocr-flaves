@@ -32,7 +32,24 @@ services:
         limits:
           cpus: '1'
           memory: 8G
-      
+  
+  # non-default service
+  internvl-service:
+    image: ismailoz/internvl
+    ports:
+      - "11436:11436"
+    volumes:
+      - ./data/data:/data
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 16G
+  
+# Volume definitions
 volumes:
   llava_data:
   bakllava_data:
+  internvl_data:
