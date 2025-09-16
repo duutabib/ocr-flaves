@@ -19,22 +19,18 @@
 - [x] Create Dockerfile.extract for extract service
 - [x] Create .dockerignore for extract context
 - [x] Update docker-compose.yml to add extract-service
-- [ ] Test extract-service container with llava and bakllava services
-- [ ] Document usage and troubleshooting steps
-- [ ] Implement document format detection in extract.py
-- [ ] Implement document type detection in extract.py
+- [x] Implemented document type detection with `python-magic`.
+- [x] Add internVL model service to system
+- [x] System works end to end.
+- [X] Test extract-service container with llava and bakllava services
+
+- [x] Implement document format detection in extract.py
+- [x] Implement document type detection in extract.py
 - [ ] Implement scoring of models based on response quality
 - [ ] Implement duplicate detection for documents.
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
-- [] Implement document type detection in extract.py
-- [] Implement scoring of models based on response quality
-- [] Implement duplicate detection for documents.
-- [] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
-- [] Implement user selection for where results from models are quite different according to some tolerance.
-- [] Implement data parser to standardize the output from models for consistent output by doucment type.
-- [X] Implemented document type detection with `python-magic`.
 
 
 ## Testing
