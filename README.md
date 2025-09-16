@@ -2,6 +2,35 @@
 
 A powerful OCR (Optical Character Recognition) solution built with Python and Docker, designed to extract and process data from various document types including invoices, receipts, and forms.
 
+## Development Setup
+
+1. **Clone the repository** (if you haven't already):
+   ```bash
+   git clone https://github.com/yourusername/ocr-flaves.git
+   cd ocr-flaves
+   ```
+
+2. **Set up a virtual environment** (recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install the package in development mode**:
+   ```bash
+   pip install -e ".[dev]"
+   ```
+
+4. **Install pre-commit hooks** (recommended for code quality):
+   ```bash
+   pre-commit install
+   ```
+
+5. **Run tests**:
+   ```bash
+   pytest tests/
+   ```
+
 ## Features
 
 - **Multi-format Support**: Process images (JPG, PNG, WEBP) and PDFs
