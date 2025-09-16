@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from typing import BinaryIO, List
+from typing import BinaryIO, Dict, Any
 import magic
 from functools import wraps
 from flask import request, abort
