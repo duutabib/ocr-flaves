@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocr-flaves"
+version = "0.1.0"
+description = "OCR processing pipeline with enhanced document handling"
+authors = [
+    {name = "Abib Duut", email = "k.aduut@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Text Processing :: General"
+]
+
+dependencies = [
+    "python-magic>=0.4.27",
+    "Pillow>=10.0.0",
+    "requests>=2.31.0",
+    "pydantic>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "numpy>=1.24.0",
+    "opencv-python-headless>=4.7.0",
+    "PyMuPDF>=1.22.0",
+    "Flask>=2.0.0",
+    'redis>=4.5.5',
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "pylint>=2.17.0",
+    "pre-commit>=3.0.0",
+    "ipython>=8.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/ocr-flaves"
+Documentation = "https://github.com/yourusername/ocr-flaves#readme"
+Issues = "https://github.com/yourusername/ocr-flaves/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["staging*", "staging/*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+
+[project.scripts]
+ocr-flaves = "staging.cli:main"  # Command-line interface
