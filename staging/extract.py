@@ -4,7 +4,8 @@ import json
 import base64
 import time
 from typing import Optional, Dict, Any
-from document_processor import DocumentProcessor
+from processors.document_processor import EnhancedDocumentProcessor
+from config import DEFAULT_DATA_PATH
 from config import DEFAULT_MODELS
 
 # Set url for model container...
@@ -15,7 +16,7 @@ class ModelClient:
         self.base_url = base_url
         self.model_name = model_name
         self.api_url = f"{base_url}/api/generate"
-        self.doc_processor = DocumentProcessor()
+        self.doc_processor = EnhancedDocumentProcessor()
 
     def get_image_base64(self, image_path: str) -> Optional[str]:
         """Converts an image file to base64 encoded string."""
@@ -119,23 +120,23 @@ def process_with_model(client: ModelClient, file_path: str, prompt: str = None, 
     
     try:
         # Step 1: Extract raw text first
-        print("Extracting text from image...")
-        extracted_text = client.extract_text(image_path)
+        print("Extracting text from file...")
+        extracted_text = client.extract_text(file_path)
         
         if not extracted_text:
-            print("Failed to extract text from image.")
+            print("Failed to extract text from file.")
             return
             
         # Step 2: Detect document type and get appropriate prompt
-        doc_type = client.doc_processor.detect_document_type(extracted_text)
-        final_prompt = prompt or client.doc_processor.get_extraction_prompt(doc_type)
+        doc_type = client.doc_processor._detect_document_type(extracted_text)
+        final_prompt = prompt or client.doc_processor._get_extraction_prompt(doc_type)
         
         print(f"Detected document type: {doc_type}")
         print(f"Using prompt: {final_prompt}")
         print("-"*50)
         
         # Step 3: Process with the final prompt
-        result = client.process_image(image_path, final_prompt)
+        result = client.process_document(file_path, final_prompt)
         
         # Step 4: Display results
         if result:
@@ -169,7 +170,8 @@ def main():
     # Initialize clients for both models
     clients = [
         (DEFAULT_MODELS['llava']['tag'], ModelClient(base_url=DEFAULT_MODELS['llava']['url'], model_name="llava")),
-        (DEFAULT_MODELS['bakllava']['tag'], ModelClient(base_url=DEFAULT_MODELS['bakllava']['url'], model_name="bakllava"))
+        (DEFAULT_MODELS['bakllava']['tag'], ModelClient(base_url=DEFAULT_MODELS['bakllava']['url'], model_name="bakllava")),
+        (DEFAULT_MODELS['internvl']['tag'], ModelClient(base_url=DEFAULT_MODELS['internvl']['url'], model_name="internvl"))
     ]
     
     # Example usage
