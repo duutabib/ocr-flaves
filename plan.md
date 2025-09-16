@@ -9,6 +9,8 @@
 - .dockerignore created to keep container lean
 - User requested document format detection to be added to extract.py
 
+## TODO
+
 ## Task List
 - [x] Add containerization for two models placeholder models.
 - [x] Add containarized service for extract.py
@@ -24,18 +26,18 @@
 - [ ] Implement scoring of models based on response quality
 - [ ] Implement duplicate detection for documents.
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
-- [] Implement user selection for where results from modesl are quite different according to some tolerance.
+- [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
 - [] Implement document type detection in extract.py
 - [] Implement scoring of models based on response quality
 - [] Implement duplicate detection for documents.
 - [] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
-- [] Implement user selection for where results from modesl are quite different according to some tolerance.
+- [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
 - [X] Implemented document type detection with `python-magic`.
 
-## Testing
 
+## Testing
 ### Unit Tests for Extraction Features
 
 #### Test Cases for Document Format Detection
