@@ -1,18 +1,31 @@
+import os
 import re
 import logging
-
-from staging.core.reliablity import CircuitBreakerConfig
-from ..core.monitor import OCRMetrics
-from ..core.security import DocumentValidator
-from ..core.reliability import CircuitBreaker, RetryStrategy
-from ..core.performance import AsyncDocumentProcessor, DocumentCache
-from typing import Dict, Optional
+from pathlib import Path
+from staging.core.reliability import CircuitBreakerConfig, CircuitBreaker, RetryStrategy
+from staging.core.monitor import OCRMetrics
+from staging.core.security import DocumentValidator
+from staging.core.performance import DocumentCache
+from typing import BinaryIO, Optional
+from typing import Any, Dict
 
 from pathlib import Path
 
 
-class EnhanchedDocumentProcessor:
+class EnhancedDocumentProcessor:
     """Main document class with all improvements"""
+    
+    # Supported file extensions and their MIME types
+    EXTENSION_MAPPING = {
+        '.pdf': 'application/pdf',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.tiff': 'image/tiff',
+        '.tif': 'image/tiff',
+        '.bmp': 'image/bmp',
+        '.webp': 'image/webp'
+    }
     
     def __init__(self):
         self.metrics = OCRMetrics()
@@ -20,6 +33,30 @@ class EnhanchedDocumentProcessor:
         self.circuit_breaker = CircuitBreaker(CircuitBreakerConfig())
         self.logging = logging.getLogger(__name__)
         self.cache = DocumentCache()
+    
+    @classmethod
+    def get_file_extension(cls, file_path: str) -> str:
+        """Get the lowercase file extension with dot."""
+        return Path(file_path).suffix.lower()
+    
+    @classmethod
+    def get_file_type(cls, file_path: str) -> str:
+        """Get the file type based on its extension."""
+        ext = cls.get_file_extension(file_path)
+        return cls.EXTENSION_MAPPING.get(ext, 'unknown')
+    
+    @classmethod
+    def is_supported_file_type(cls, file_path: str) -> bool:
+        """Check if the file type is supported for processing.
+        
+        Args:
+            file_path: Path to the file to check
+            
+        Returns:
+            bool: True if the file type is supported, False otherwise
+        """
+        ext = cls.get_file_extension(file_path)
+        return ext in cls.EXTENSION_MAPPING
 
     @OCRMetrics().track_performance()
     def process(self, file_stream: BinaryIO, filename: str, **params) -> Dict[str, Any]:
@@ -157,7 +194,7 @@ class EnhanchedDocumentProcessor:
 
         }
         
-        # Calculate scores
+        # Calculate scores (# scores not models results...)
         scores = {doc_type: sum(1 for p in patterns if re.search(p, text))
                  for doc_type, patterns in indicators.items()}
         
