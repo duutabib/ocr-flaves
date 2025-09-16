@@ -39,7 +39,7 @@ services:
     ports:
       - "11436:11436"
     volumes:
-      - ./data/data:/data
+      - internvl_data:/data
     environment:
       - CUDA_VISIBLE_DEVICES=0
     deploy:
@@ -52,4 +52,4 @@ services:
 volumes:
   llava_data:
   bakllava_data:
-  internvl_data:
+  internvl_data:  
