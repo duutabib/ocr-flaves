@@ -1,9 +1,5 @@
-from Path import path
-from typing import Callable
 
-
-DEFAULT_DATA_PATH = '/Users/duuta/ocr-flaves/ghana_invoice_samples/'      
-
+DEFAULT_DATA_PATH = '/Users/duuta/ocr-flaves/data/'
 
 DEFAULT_MODELS = {
     'llava': {
@@ -16,6 +12,12 @@ DEFAULT_MODELS = {
         'name': 'bakllava',
         'url': 'http://localhost:11435',
         'tag': 'baKLLaVA'
+    },
+
+    'internvl':{
+        'name': 'internvl',
+        'url': 'http://localhost:11436',
+        'tag': 'internVL'
     }
 }
 
