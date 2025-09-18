@@ -31,7 +31,8 @@
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
-
+- [] Implement scoring for the models based on response quality... 
+- [] Move document indicators to a config file.
 
 ## Testing
 ### Unit Tests for Extraction Features
