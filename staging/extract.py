@@ -2,8 +2,7 @@ import os
 import requests
 import json
 import base64
-import time
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Optional, Dict, Any
 from processors.document_processor import EnhancedDocumentProcessor
 from core.scoring import ModelScorer, ModelScore
 from config import DEFAULT_DATA_PATH
