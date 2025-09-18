@@ -1,9 +1,10 @@
-from typing import Dict, Any, List, Optional
-import json
 import re
-from dataclasses import dataclass
-from datetime import datetime
+import json
 from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Dict, Any, List, Optional
+
 
 @dataclass
 class ModelScore:
@@ -19,8 +20,16 @@ class ModelScorer:
     """Scores model responses based on various metrics."""
     
     @staticmethod
-    def calculate_completeness(response: Dict[str, Any]) -> float:
-        """Calculate how complete the response is (0-1)."""
+    def compute_completeness(response: Dict[str, Any]) -> float:
+        """Calculate how complete the response is (0-1)
+        how many of the extracted fields are actually filled
+        
+        Args:
+            response: The response to calculate completeness for
+            
+        Returns:
+            float: The completeness score (0-1)
+        """
         if not response:
             return 0.0
             
@@ -33,7 +42,7 @@ class ModelScorer:
         return non_empty_fields / total_fields
     
     @staticmethod
-    def calculate_confidence(response: Dict[str, Any]) -> float:
+    def compute_confidence(response: Dict[str, Any]) -> float:
         """Calculate confidence score based on response structure (0-1)."""
         if not response:
             return 0.0
@@ -72,8 +81,8 @@ class ModelScorer:
                 metrics={"completeness": 0.0, "confidence": 0.0}
             )
         
-        completeness = cls.calculate_completeness(response)
-        confidence = cls.calculate_confidence(response)
+        completeness = cls.compute_completeness(response)
+        confidence = cls.compute_confidence(response)
         
         # Combine scores (can be adjusted with weights)
         score = (completeness * 0.6) + (confidence * 0.4)
