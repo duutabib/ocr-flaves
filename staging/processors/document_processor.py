@@ -6,9 +6,9 @@ from staging.core.reliability import CircuitBreakerConfig, CircuitBreaker, Retry
 from staging.core.monitor import OCRMetrics
 from staging.core.security import DocumentValidator
 from staging.core.performance import DocumentCache
-from typing import BinaryIO, Optional
+from typing import BinaryIO
 from typing import Any, Dict
-from config import DOCUMENT_INDICATORS
+from staging.config import DOCUMENT_INDICATORS
 
 from pathlib import Path
 
