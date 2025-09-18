@@ -14,18 +14,8 @@ SUPPORTED_MIME_TYPES = {
     # Images
     'image/jpeg',
     'image/png',
-    'image/tiff',
-    'image/bmp',
     'image/webp',
     
-    # Office documents
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'application/vnd.ms-excel',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'application/vnd.ms-powerpoint',
-    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-    'application/vnd.oasis.opendocument.text',
 }
 
 # File extensions for supported formats
@@ -36,8 +26,6 @@ SUPPORTED_EXTENSIONS = {
     # Images
     '.jpg', '.jpeg', '.png', '.tiff', '.bmp', '.webp',
     
-    # Office
-    '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.odt',
 }
 
 class DocumentFormatError(ValueError):
@@ -79,7 +67,7 @@ def is_supported_document(file_path: str) -> bool:
     """
     try:
         # First check by extension for quick filtering
-        ext = os.path.splitext(file_path)[1].lower()
+        ext = Path(file_path).suffix.lower()
         if ext in SUPPORTED_EXTENSIONS:
             return True
             
