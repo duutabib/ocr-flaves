@@ -8,6 +8,7 @@ from staging.core.security import DocumentValidator
 from staging.core.performance import DocumentCache
 from typing import BinaryIO, Optional
 from typing import Any, Dict
+from config import DOCUMENT_INDICATORS
 
 from pathlib import Path
 
@@ -107,96 +108,9 @@ class EnhancedDocumentProcessor:
         """Detect document type based on text content."""
         text = text.lower()
         
-        # Document type indicators
-        indicators = {
-            'invoice': [
-                r'invoice', 
-                r'bill to', 
-                r'invoice number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-            'receipt': [
-                r'receipt', 
-                r'payment', 
-                r'tendered', 
-                r'change', 
-                r'cash', 
-                r'card'
-            ],
-            'form': [
-                r'form', 
-                r'application', 
-                r'request', 
-                r'proposal', 
-                r'offer', 
-                r'quote'
-            ],
-
-            'purchase order': [
-                r'purchase order', 
-                r'po', 
-                r'purchase order number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-            'bill of materials': [
-                r'bill of materials', 
-                r'bill of materials number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-
-            'deposit slip': [
-                r'deposit slip', 
-                r'deposit slip number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-
-            'credit/debit memo': [
-                r'credit/debit memo', 
-                r'credit/debit memo number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-
-            'petty cash voucher': [
-                r'petty cash voucher', 
-                r'petty cash voucher number', 
-                r'date',
-                r'customer',
-                r'items',
-                r'total', 
-                r'subtotal', 
-                r'tax',
-            ],
-
-        }
-        
-        # Calculate scores (# scores not models results...)
+        # Calculate extract scores (# models results...)
         scores = {doc_type: sum(1 for p in patterns if re.search(p, text))
-                 for doc_type, patterns in indicators.items()}
+                 for doc_type, patterns in DOCUMENT_INDICATORS.items()}
         
         # Return best match or 'document' as default
         return max(scores.items(), key=lambda x: x[1])[0] if scores else 'document'
@@ -207,7 +121,7 @@ class EnhancedDocumentProcessor:
         processors = {
             'invoice': InvoiceProcessor(),
             'receipt': ReceiptProcessor(),
-            'document': DocumentProcessor(),
+            'document': EnhancedDocumentProcessorDocumentProcessor(),
         }
         return processors.get(doc_type, processors['document'])
 
