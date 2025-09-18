@@ -21,6 +21,7 @@ DEFAULT_MODELS = {
     }
 }
 
+# Document indicators
 DOCUMENT_INDICATORS = {
 
             'invoice': [
@@ -43,61 +44,5 @@ DOCUMENT_INDICATORS = {
                 r'paid by',
                 r'paid to', 
             ],
-
-            #'purchase order': [
-                #r'purchase order', 
-                #r'po', 
-                #r'purchase order number', 
-                #r'date',
-                #r'customer',
-                #r'items',
-                #r'total', 
-                #r'subtotal', 
-                #r'tax',
-            #],
-
-            #'bill of materials': [
-                #r'bill of materials', 
-                #r'bill of materials number', 
-                #r'date',
-                #r'customer',
-                #r'items',
-                #r'total', 
-                #r'subtotal', 
-                #r'tax',
-            #],
-
-            #'deposit slip': [
-                #r'deposit slip', 
-                #r'deposit slip number', 
-                #r'date',
-                #r'customer',
-                #r'items',
-                #r'total', 
-                #r'subtotal', 
-                #r'tax',
-            #],
-
-            #'credit/debit memo': [
-                #r'credit/debit memo', 
-                #r'credit/debit memo number', 
-                #r'date',
-                #r'customer',
-                #r'items',
-                #r'total', 
-                #r'subtotal', 
-                #r'tax',
-            #],
-
-            #'petty cash voucher': [
-                #r'petty cash voucher', 
-                #r'petty cash voucher number', 
-                #r'date',
-                #r'customer',
-                #r'items',
-                #r'total', 
-                #r'subtotal', 
-                #r'tax',
-            #],
 
         }
