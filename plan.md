@@ -23,7 +23,7 @@
 - [x] Add internVL model service to system
 - [x] System works end to end.
 - [X] Test extract-service container with llava and bakllava services
-
+- [x] Move document indicators to config file
 - [x] Implement document format detection in extract.py
 - [x] Implement document type detection in extract.py
 - [ ] Implement scoring of models based on response quality
@@ -31,8 +31,8 @@
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
-- [] Implement scoring for the models based on response quality... 
-- [] Move document indicators to a config file.
+- [x] Implement scoring for the models based on response quality... 
+- [] Change in memory output to model to dict from json, but final output should be json.
 
 ## Testing
 ### Unit Tests for Extraction Features
