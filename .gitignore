@@ -23,7 +23,6 @@ share/python-wheels/
 *.egg
 MANIFEST
 data/
-ghana_invoice_samples/
 .DS_Store
 *.ipynb
 scaffold/
