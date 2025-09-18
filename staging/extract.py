@@ -3,10 +3,10 @@ import requests
 import json
 import base64
 from typing import Optional, Dict, Any
-from processors.document_processor import EnhancedDocumentProcessor
-from core.scoring import ModelScorer, ModelScore
-from config import DEFAULT_DATA_PATH
-from config import DEFAULT_MODELS
+from staging.processors.document_processor import EnhancedDocumentProcessor
+from staging.core.scoring import ModelScorer, ModelScore
+from staging.config import DEFAULT_DATA_PATH
+from staging.config import DEFAULT_MODELS
 
 # Set url for model container...
 
