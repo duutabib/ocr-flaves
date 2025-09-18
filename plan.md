@@ -26,7 +26,7 @@
 - [x] Move document indicators to config file
 - [x] Implement document format detection in extract.py
 - [x] Implement document type detection in extract.py
-- [ ] Implement scoring of models based on response quality
+- [x] Implement scoring of models based on response quality
 - [ ] Implement duplicate detection for documents.
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from models are quite different according to some tolerance.
