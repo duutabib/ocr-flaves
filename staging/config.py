@@ -25,15 +25,18 @@ DEFAULT_MODELS = {
 DOCUMENT_INDICATORS = {
 
             'invoice': [
-                r'invoice', 
+                r'vendor_name', 
+                r'vendor_email',
+                r'vendor_phone',
                 r'bill to|customer', 
                 r'invoice number', 
                 r'date',
                 r'items',
                 r'purchase order',
                 r'subtotal', 
-                r'tax',
-                r'grand total|Grand Total', 
+                r'tax_amount',
+                r'grand total|Grand Total|total_amount', 
+                r'currency',
             ],
 
             'receipt': [
