@@ -33,6 +33,7 @@
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
 - [x] Implement scoring for the models based on response quality... 
 - [] Change in memory output to model to dict from json, but final output should be json.
+- [] move project management to uv.
 
 ## Testing
 ### Unit Tests for Extraction Features
