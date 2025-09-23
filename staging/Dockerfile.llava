@@ -30,4 +30,4 @@ COPY server.py .
 EXPOSE 11434 8000
 
 # Start both Ollama and FastAPI using supervisord-style command
-CMD ["/bin/sh", "-c", "/app/start-llava.sh && uvicorn server:app --host 0.0.0.0 --port 8000"]
+CMD ["/bin/sh", "-c", "/app/startup-llava.sh && uvicorn server:app --host 0.0.0.0 --port 8000"]
