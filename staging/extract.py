@@ -2,40 +2,89 @@ import os
 import requests
 import json
 import base64
-from typing import Optional, Dict, Any
+import logging
+import argparse
+from mlx_vlm import load, generate, apply_chat_template
+from mlx_vlm.utils import load_image
+from typing import Optional, Dict, Any, List, Union
 from staging.processors.document_processor import EnhancedDocumentProcessor
 from staging.core.scoring import ModelScorer, ModelScore
-from staging.config import DEFAULT_DATA_PATH
-from staging.config import DEFAULT_MODELS
+from staging.config import DEFAULT_DATA_PATH, DEFAULT_MODELS
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('extraction.log')
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Set url for model container...
 
 
 class ModelClient:
-    def __init__(self, base_url: str, model_name: str):
+    def __init__(self, base_url: str, model_name: str, verbose: bool = False):
         self.base_url = base_url
         self.model_name = model_name
         self.api_url = f"{base_url}/api/generate"
         self.doc_processor = EnhancedDocumentProcessor()
+        self.verbose = verbose
+        if self.verbose:
+            logger.setLevel(logging.DEBUG)
+            logger.debug(f"Initialized ModelClient with base_url={base_url}, model_name={model_name}")
+
+
+    def load_image(self):
+        """Load image from file."""
+        try:
+            if self.verbose:
+                logger.debug(f"Loading image from {self.image_path}")
+            image = load_image(self.image_path)
+            if self.verbose:
+                logger.debug(f"Image loaded successfully")
+            return image
+        except FileNotFoundError:
+            error_msg = f"File not found: {self.image_path}"
+            logger.error(error_msg)
+            return None
+        except Exception as e:
+            error_msg = f"Error loading image {self.image_path}: {str(e)}"
+            logger.error(error_msg, exc_info=self.verbose)
+            return None
+        
 
     def get_image_base64(self, image_path: str) -> Optional[str]:
         """Converts an image file to base64 encoded string."""
         try: 
+            if self.verbose:
+                logger.debug(f"Reading image file: {image_path}")
             with open(image_path, "rb") as image_file:
-                return base64.b64encode(image_file.read()).decode("utf-8")
+                data = image_file.read()
+                if self.verbose:
+                    logger.debug(f"Read {len(data)} bytes from {image_path}")
+                return base64.b64encode(data).decode("utf-8")
         except FileNotFoundError:
-            print(f"Error: {image_path} not found")
+            error_msg = f"File not found: {image_path}"
+            logger.error(error_msg)
             return None
         except Exception as e:
-            print(f"Error reading image {image_path}: {e}")
+            error_msg = f"Error reading image {image_path}: {str(e)}"
+            logger.error(error_msg, exc_info=self.verbose)
             return None
 
 
     def extract_text(self, image_path: str) -> Optional[str]:
         """Extract text from image using the model."""
         try:
+            if self.verbose:
+                logger.info(f"Extracting text from {image_path} using {self.model_name}")
+                
             image_b64 = self.get_image_base64(image_path)
             if not image_b64:
+                logger.warning("Failed to get base64 encoded image")
                 return None
                 
             payload = {
@@ -45,12 +94,30 @@ class ModelClient:
                 "stream": False,
             }
             
+            if self.verbose:
+                logger.debug(f"Sending request to {self.api_url}")
+                logger.debug(f"Payload size: {len(str(payload))} bytes")
+            
             response = requests.post(self.api_url, json=payload, timeout=60)
             response.raise_for_status()
-            return response.json().get("response")
             
+            if self.verbose:
+                logger.debug(f"Received response with status code {response.status_code}")
+                logger.debug(f"Response headers: {response.headers}")
+            
+            result = response.json().get("response")
+            if self.verbose and result:
+                logger.debug(f"Extracted text length: {len(result)} characters")
+                
+            return result
+            
+        except requests.exceptions.RequestException as e:
+            error_msg = f"Request error while extracting text: {str(e)}"
+            logger.error(error_msg, exc_info=self.verbose)
+            return None
         except Exception as e:
-            print(f"Error extracting text: {e}")
+            error_msg = f"Unexpected error while extracting text: {str(e)}"
+            logger.error(error_msg, exc_info=self.verbose)
             return None
     
     def _call_model_api(self, file_path: str, prompt: str) -> Optional[Dict[str, Any]]:
@@ -158,7 +225,8 @@ def process_with_model(
     file_path: str, 
     prompt: str = None, 
     model_name: str = None,
-    enable_scoring: bool = False
+    enable_scoring: bool = False,
+    verbose: bool = False
 ):
     """
     Process a document with type detection and appropriate prompting.
@@ -170,9 +238,12 @@ def process_with_model(
         model_name: Name of the model being used (for display purposes)
         enable_scoring: If True, uses the scoring system to evaluate the response
     """
-    print(f"\n{'='*50}")
-    print(f"Processing with {model_name or 'default model'}...")
-    print(f"File: {file_path}")
+    logger.info(f"\n{'='*50}")
+    logger.info(f"Processing with {model_name or 'default model'}")
+    logger.info(f"File: {file_path}")
+    if verbose:
+        logger.debug(f"Enable scoring: {enable_scoring}")
+        logger.debug(f"Custom prompt: {prompt}")
     
     # Process the document with or without scoring
     if enable_scoring:
@@ -258,7 +329,8 @@ def process_directory(directory: str, client: ModelClient, prompt: str = None):
 def process_with_best_model(
     file_path: str,
     prompt: str = None,
-    min_confidence: float = 0.5
+    min_confidence: float = 0.5,
+    verbose: bool = False
 ) -> Optional[ModelScore]:
     """
     Process a document with all available models and return the best result.
@@ -275,84 +347,168 @@ def process_with_best_model(
     models = {
         'llava': ModelClient(
             base_url=DEFAULT_MODELS['llava']['url'],
-            model_name="llava"
+            model_name="llava",
+            verbose=verbose
         ),
         'bakllava': ModelClient(
             base_url=DEFAULT_MODELS['bakllava']['url'],
-            model_name="bakllava"
+            model_name="bakllava",
+            verbose=verbose
         ),
-        'internvl': ModelClient(
-            base_url=DEFAULT_MODELS['internvl']['url'],
-            model_name="internvl"
-        )
+        #'internvl': ModelClient(
+        #    base_url=DEFAULT_MODELS['internvl']['url'],
+        #    model_name="internvl",
+        #    verbose=verbose
+        #)
     }
     
-    print(f"\n{'#'*60}")
-    print(f"# Processing with all available models")
-    print(f"# File: {file_path}")
-    print(f"# Minimum Confidence: {min_confidence*100:.0f}%")
-    print(f"{'#'*60}")
+    logger.info(f"\n{'#'*60}")
+    logger.info(f"# Processing with all available models")
+    logger.info(f"# File: {file_path}")
+    logger.info(f"# Minimum Confidence: {min_confidence*100:.0f}%")
+    logger.info(f"{'#'*60}")
+    
+    if verbose:
+        logger.debug(f"Using prompt: {prompt or 'Default prompt based on document type'}")
+        logger.debug(f"Available models: {', '.join(models.keys())}")
     
     # Process with each model and collect scores
     all_scores = []
     for model_name, client in models.items():
-        print(f"\n{'='*50}")
-        print(f"Running {model_name}...")
+        logger.info(f"\n{'='*50}")
+        logger.info(f"Running {model_name}...")
         
-        # Process with scoring enabled
-        result = client.process_document(file_path, prompt, return_scored=True)
-        
-        if result and isinstance(result, ModelScore):
-            all_scores.append(result)
-            print(f"  - Score: {result.score:.2f}")
-            print(f"  - Confidence: {result.confidence*100:.1f}%")
-        else:
-            print(f"  - Failed to get valid score")
+        try:
+            # Process with scoring enabled
+            result = client.process_document(file_path, prompt, return_scored=True)
+            
+            if result and isinstance(result, ModelScore):
+                all_scores.append(result)
+                logger.info(f"  - Score: {result.score:.2f}")
+                logger.info(f"  - Confidence: {result.confidence*100:.1f}%")
+                
+                if verbose:
+                    logger.debug(f"  - Model metrics: {result.metrics}")
+            else:
+                logger.warning(f"  - Failed to get valid score from {model_name}")
+                
+        except Exception as e:
+            error_msg = f"Error processing with {model_name}: {str(e)}"
+            logger.error(error_msg, exc_info=verbose)
     
     # Select the best model based on scores
     if all_scores:
         best_result = ModelScorer.select_best_model(all_scores, min_confidence)
         if best_result:
-            print(f"\n{'#'*60}")
-            print("# Best Result:")
-            print(f"# Model: {best_result.model_name}")
-            print(f"# Score: {best_result.score:.2f}")
-            print(f"# Confidence: {best_result.confidence*100:.1f}%")
-            print(f"{'#'*60}")
+            logger.info(f"\n{'#'*60}")
+            logger.info("# Best Result:")
+            logger.info(f"# Model: {best_result.model_name}")
+            logger.info(f"# Score: {best_result.score:.2f}")
+            logger.info(f"# Confidence: {best_result.confidence*100:.1f}%")
+            logger.info(f"{'#'*60}")
             
-            print("\nExtracted Information:")
-            print("-"*50)
-            print(json.dumps(best_result.response, indent=2))
+            if verbose:
+                logger.debug(f"# All scores: {[(s.model_name, s.score) for s in all_scores]}")
+            
+            logger.info("\nExtracted Information:")
+            logger.info("-"*50)
+            logger.info(json.dumps(best_result.response, indent=2))
+            
+            # Log to file
+            try:
+                with open('extraction_results.json', 'a') as f:
+                    result_data = {
+                        'file': file_path,
+                        'model': best_result.model_name,
+                        'score': best_result.score,
+                        'confidence': best_result.confidence,
+                        'timestamp': str(datetime.now()),
+                        'data': best_result.response
+                    }
+                    f.write(json.dumps(result_data) + '\n')
+            except Exception as e:
+                logger.warning(f"Failed to save results to file: {str(e)}")
             
             return best_result
     
-    print("\nNo model produced a valid result above the confidence threshold.")
+    logger.warning("\nNo model produced a valid result above the confidence threshold.")
     return None
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Extract text from documents using AI models')
+    parser.add_argument('path', nargs='?', default=DEFAULT_DATA_PATH,
+                      help=f'Path to file or directory (default: {DEFAULT_DATA_PATH})')
+    parser.add_argument('--prompt', type=str, default=None,
+                      help='Custom prompt for extraction')
+    parser.add_argument('--verbose', '-v', action='store_true',
+                      help='Enable verbose logging')
+    parser.add_argument('--min-confidence', type=float, default=0.5,
+                      help='Minimum confidence threshold (0-1, default: 0.5)')
+    return parser.parse_args()
+
 def main():
-    # Get user input
-    input_path = input(f"Enter file or directory path [{DEFAULT_DATA_PATH}]: ") or DEFAULT_DATA_PATH
-    custom_prompt = input("Enter custom prompt (or press Enter for auto): ") or None
+    # Parse command line arguments
+    args = parse_arguments()
+    
+    # Configure logging level based on verbosity
+    log_level = logging.DEBUG if args.verbose else logging.INFO
+    logger.setLevel(log_level)
+    
+    input_path = args.path
+    custom_prompt = args.prompt
     
     if not os.path.exists(input_path):
         print(f"Error: Path not found: {input_path}")
         return
     
-    if os.path.isfile(input_path):
-        # Process single file with model selection
-        process_with_best_model(input_path, custom_prompt)
-    else:
-        # Process all supported files in directory
-        for filename in os.listdir(input_path):
-            file_path = os.path.join(input_path, filename)
-            if os.path.isfile(file_path):
-                # Initialize a client just for checking file type
-                temp_client = ModelClient(
-                    base_url=DEFAULT_MODELS['llava']['url'],
-                    model_name="llava"
-                )
-                if temp_client.doc_processor.is_supported_file_type(file_path):
-                    process_with_best_model(file_path, custom_prompt)
+    try:
+        if os.path.isfile(input_path):
+            # Process single file with model selection
+            logger.info(f"Processing single file: {input_path}")
+            process_with_best_model(
+                input_path, 
+                custom_prompt,
+                min_confidence=args.min_confidence,
+                verbose=args.verbose
+            )
+        else:
+            # Process all supported files in directory
+            logger.info(f"Processing directory: {input_path}")
+            processed_count = 0
+            
+            for filename in sorted(os.listdir(input_path)):
+                file_path = os.path.join(input_path, filename)
+                if os.path.isfile(file_path):
+                    # Initialize a client just for checking file type
+                    temp_client = ModelClient(
+                        base_url=DEFAULT_MODELS['llava']['url'],
+                        model_name="llava",
+                        verbose=args.verbose
+                    )
+                    if temp_client.doc_processor.is_supported_file_type(file_path):
+                        logger.info(f"\nProcessing file {processed_count + 1}: {filename}")
+                        process_with_best_model(
+                            file_path, 
+                            custom_prompt,
+                            min_confidence=args.min_confidence,
+                            verbose=args.verbose
+                        )
+                        processed_count += 1
+            
+            logger.info(f"\nProcessing complete. Processed {processed_count} files.")
+            
+    except KeyboardInterrupt:
+        logger.info("\nProcessing interrupted by user.")
+    except Exception as e:
+        logger.error(f"An error occurred: {str(e)}", exc_info=args.verbose)
+        return 1
+        
+    return 0
 
 if __name__ == "__main__":
-    main()
+    try:
+        exit_code = main()
+        exit(exit_code or 0)
+    except Exception as e:
+        logger.critical(f"Critical error: {str(e)}", exc_info=True)
+        exit(1)
