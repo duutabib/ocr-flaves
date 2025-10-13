@@ -21,28 +21,37 @@
 - [x] Update docker-compose.yml to add extract-service
 - [x] Implemented document type detection with `python-magic`.
 - [x] Add internVL model service to system
-- [x] System works end to end.
-- [X] Test extract-service container with llava and bakllava services
+- [x] System works end to end reliably.
+- [x] Test extract-service container with llava and bakllava services
 - [x] Move document indicators to config file
 - [x] Implement document format detection in extract.py
-- [x] Implement document type detection in extract.py
-- [x] Implement scoring of models based on response quality
+- [x] Implement scoring for the models based on response quality... 
+- [x] Implement MLX-vlm processor for document processing 
+- [x] Move project management to uv
+    - [x] move project to uv 
+    - [ ] fix issues with uv move
+- [x] Change in memory output to model to dict from json, but final output should be json.
+- [x] Optimized system for small model and implemented testing...
+
+
+### Next set of tasks...
 - [ ] Implement duplicate detection for documents.
 - [ ] Implement persistence of data captured as a json document with corresponding metadata, including document type, document hash, source, create date, upload date, and model used.
 - [] Implement user selection for where results from models are quite different according to some tolerance.
 - [] Implement data parser to standardize the output from models for consistent output by doucment type.
-- [x] Implement scoring for the models based on response quality... 
-- [] Change in memory output to model to dict from json, but final output should be json.
-- [] move project management to uv.
+- [] Implement OPen AI service model
+
+## Not urgent...
+- [] Improve latency.. current testing at 2 - 3mins # not urgent
 
 ## Testing
 ### Unit Tests for Extraction Features
 
 #### Test Cases for Document Format Detection
-- [ ] Test detection of PDF files
-- [ ] Test detection of image formats (PNG, JPG, TIFF)
-- [ ] Test handling of unsupported formats
-- [ ] Test corrupted file handling
+- [x] Test detection of image formats (PNG, JPG, TIFF)
+- [x] Test handling of unsupported formats
+- [x] Test corrupted file handling
+
 
 #### Test Cases for Document Type Detection
 - [ ] Test receipt detection
@@ -59,16 +68,26 @@
 - [ ] Test extraction from different document layouts
 
 #### Integration Tests
-- [ ] Test end-to-end extraction pipeline
+- [x] Test end-to-end extraction pipeline
 - [ ] Test model response consistency
 - [ ] Test error handling and logging
 - [ ] Test performance with large documents
 
+# Long term considerations
+ --  [] Train a model from stratch.
+
 ### Test Automation
-- [ ] Set up pytest framework
+- [x] Set up pytest framework
 - [ ] Create test fixtures for sample documents
 - [ ] Implement CI/CD pipeline for tests
 - [ ] Add code coverage reporting
 
 ## Current Goal
 Test extract container with services
+
+
+# current sprint 
+- [] adjust based on user inputs, update model weights
+- [] implement model selection based on scoring
+- [] Train some small models for task
+- [] Finish testing of scoring, set up models tests in regression style
